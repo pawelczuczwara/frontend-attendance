@@ -65,9 +65,9 @@ td.missed-col {
     background: #ffffff;
     border: 4px solid black;
 }
-.control-radio .control_indicator {
+/* .control-radio .control_indicator {
     border-radius: undefined%;
-}
+} */
 
 .control:hover input ~ .control_indicator,
 .control input:focus ~ .control_indicator {
@@ -79,7 +79,7 @@ td.missed-col {
 }
 .control:hover input:not([disabled]):checked ~ .control_indicator,
 .control input:checked:focus ~ .control_indicator {
-    background: #0e6647d;
+    background: #000000dd;
 }
 .control input:disabled ~ .control_indicator {
     background: #e6e6e6;

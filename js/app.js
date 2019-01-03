@@ -1,16 +1,26 @@
 'use strict'
 
 const model = {
-    days: 12,
-    students: [ 'student1', 'studen2', 'studen3', 'studen4', 'student5',  'Ikna' ],
+    days: 10,
+    students: [ 'student1', 'studen2', 'studen3', 'studen4', 'student5'],
     get_data: function get_data() {
         return JSON.parse(localStorage.student_atend);
     },
+
+    get_days: function get_days() {
+        return model.days;
+    },
+
     set_data: function set_data(new_data) {
         localStorage.student_atend = JSON.stringify(new_data);
     },
+
     check_data: function chcek_data() {
         return (localStorage.student_atend);
+    },
+
+    delete_data: function delete_data() {
+        localStorage.removeItem('student_atend');
     }
 };
 
@@ -23,6 +33,11 @@ class CreateContent
     }
 
     _getTemplate() {
+        // incerment by 1 helper - used for table header row
+        Handlebars.registerHelper("inc", function(value, options) {
+                return parseInt(value) + 1;
+        });
+
         const html = document.querySelector(this.template_class).innerHTML;
         const compiled_html = Handlebars.compile(html);
         return compiled_html;
@@ -64,6 +79,20 @@ const main = {
         view_table.set_listener();
     },
 
+    reinit: function reinit() {
+        this._delete_childs('days');
+        this._delete_childs('data');
+        this._delete_data();
+        this.init();
+    },
+
+    _delete_childs: function delete_chids(node) {
+        const data = document.querySelector(`.${node}`);
+        while (data.firstChild) {
+            data.removeChild(data.firstChild);
+        }
+    },
+
     _init_localstorage: function init_localstorage() {
         if (!model.check_data()) {
             console.log('Creating attendance records...');
@@ -89,7 +118,6 @@ const main = {
                 };
                 attendance.push(object);
             }
-            // localStorage.student_atend = JSON.stringify(attendance);
             model.set_data(attendance);
         }
     },
@@ -98,8 +126,16 @@ const main = {
         return model.get_data();
     },
 
+    get_days: function() {
+        return model.get_days();
+    },
+
     set_data: function(data) {
         model.set_data(data);
+    },
+
+    _delete_data: function() {
+        model.delete_data();
     },
 
     update_data: function(student, array, sum) {
@@ -124,7 +160,12 @@ const view_table = {
     init: function() {
         this.attend = main.get_data();
 
-        const content = new CreateContent(this.attend, '.atend_template', '.dane');
+        //table header row
+        const days = new CreateContent(this.attend[0], '.days_template', '.days');
+        days.create_HTML();
+
+        //table data rows
+        const content = new CreateContent(this.attend, '.atend_template', '.data');
         content.create_HTML();
     },
 

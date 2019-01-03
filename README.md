@@ -1,2 +1,2 @@
-udacity-frontend-attendance
-===========================
+frontend student attendance project
+===================================
