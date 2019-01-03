@@ -70,18 +70,27 @@ class CreateContent
 
 const main = {
     init: function init() {
-        view_admin.init();
+        if (model.check_data()) {
+            main.init_view_table();
+
+            //show reinit button
+            view_admin.reinit_toggle();
+        } else {
+            view_admin.init();
+        }
     },
 
     init_view_table: function init_table() {
-        this._delete_childs('days');
         this._init_localstorage();
 
         view_table.init();
         view_table.set_listener();
+
     },
 
     reinit: function reinit() {
+        view_admin.reinit_toggle();
+        
         this._delete_childs('days');
         this._delete_childs('data');
         this._delete_data();
@@ -139,8 +148,6 @@ const main = {
     set_init_data: function(days, students) {
         model.days = days;
         model.students = students;
-        console.log(model.days);
-        console.log(model.students);
     },
 
     set_data: function(data) {
@@ -192,26 +199,28 @@ const view_table = {
     // set value of missing column
     _set_missing: function(target) {
         let missed_col = target.parentNode.parentNode.parentNode.querySelector('.missed-col');
-        let data_key = target.parentNode.parentNode.parentNode.dataset.key;
+        let data_key   = target.parentNode.parentNode.parentNode.dataset.key;
 
         if (target.checked) {
             missed_col.textContent =  parseInt(missed_col.textContent) - 1;
         } else {
             missed_col.textContent =  parseInt(missed_col.textContent) + 1;
         }
+
         this._row_data(data_key);
     },
 
     // get nodes for calculating new object of complete row data.
     _row_data: function(student) {
-        const row_node = document.querySelector(`[data-key='${student}']`);
+        const row_node        = document.querySelector(`[data-key='${student}']`);
         const row_input_nodes = row_node.querySelectorAll('input');
-        const sum = row_node.querySelector('.missed-col').innerHTML;
+        const sum             = row_node.querySelector('.missed-col').innerHTML;
+        let   array           = [];
 
-        let array = [];
         for (let chbox of row_input_nodes) {
             array.push(chbox.checked);
         }
+
         main.update_data(student, array, sum);
     },
 };
@@ -226,7 +235,7 @@ const view_admin = {
     },
 
     init_render: function() {
-        this.template = '.admin_template';
+        this.template  = '.admin_template';
         this.init_data = main.get_init_data();
 
         //table header row
@@ -240,21 +249,29 @@ const view_admin = {
             names.push(name.value);
         }
         main.set_init_data(this.node_days.value, names);
+        main._delete_childs('days');
         main.init_view_table();
+
+        this.reinit_toggle();
     },
 
-    cancel: function() {
-        this.btn_admin.classList.toggle('hidden');
-        const node = this.admin_form;
-        node.parentNode.removeChild(node);
-        this.visible = false;
+    reinit_toggle: function reinit_toggle() {
+        const node_btn = document.querySelector('.reinit');
+        node_btn.classList.toggle('hidden');
     }
+
+    // cancel: function() {
+    //     this.btn_admin.classList.toggle('hidden');
+    //     const node = this.admin_form;
+    //     node.parentNode.removeChild(node);
+    //     this.visible = false;
+    // }
 
 
 }
 
 
-view_admin.init();
+main.init();
 // main.init();
 
 

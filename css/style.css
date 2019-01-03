@@ -21,7 +21,9 @@ td {
     transform: scale(2)
 } */
 
-
+.hidden {
+    display: none;
+}
 
 /* Column types */
 th.missed-col {

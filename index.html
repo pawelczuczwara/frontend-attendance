@@ -21,7 +21,7 @@
 
             </tbody>
         </table>
-        <input type='button' value='Reinit data' onclick='main.reinit()' />
+        <input type='button' class='hidden reinit' value='Reinit data' onclick='main.reinit()' />
 
         <script src="js/handlebars.min.js"></script>
 
@@ -41,7 +41,7 @@
                 <br>
                 <label>Duration [days]: <input type='text' name='days' class='duration-days' value='{{days}}' /></label>
                 <br>
-                <input type='button' onclick='view_admin.cancel()'       value='Cancel'>
+                <!-- <input type='button' onclick='view_admin.cancel()'       value='Cancel'> -->
                 <input type='button' onclick='view_admin.update_model()' value='Submit'>
             </tr>
         </script>
