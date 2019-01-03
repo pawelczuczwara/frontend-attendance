@@ -3,12 +3,9 @@
 const model = {
     days: 10,
     students: [ 'student1', 'studen2', 'studen3', 'studen4', 'student5'],
+
     get_data: function get_data() {
         return JSON.parse(localStorage.student_atend);
-    },
-
-    get_days: function get_days() {
-        return model.days;
     },
 
     set_data: function set_data(new_data) {
@@ -73,6 +70,11 @@ class CreateContent
 
 const main = {
     init: function init() {
+        view_admin.init();
+    },
+
+    init_view_table: function init_table() {
+        this._delete_childs('days');
         this._init_localstorage();
 
         view_table.init();
@@ -126,8 +128,19 @@ const main = {
         return model.get_data();
     },
 
-    get_days: function() {
-        return model.get_days();
+    get_init_data: function get_init() {
+        const data = {
+            days: model.days,
+            students: model.students
+        }
+        return data;
+    },
+
+    set_init_data: function(days, students) {
+        model.days = days;
+        model.students = students;
+        console.log(model.days);
+        console.log(model.students);
     },
 
     set_data: function(data) {
@@ -203,6 +216,45 @@ const view_table = {
     },
 };
 
-main.init();
+const view_admin = {
+    init: function() {
+        this.visible = true;
+        this.init_render();
+
+        this.node_days      = document.querySelector('input[name="days"]');
+        this.node_names     = document.querySelectorAll('input[name="name"]');
+    },
+
+    init_render: function() {
+        this.template = '.admin_template';
+        this.init_data = main.get_init_data();
+
+        //table header row
+        const days = new CreateContent(this.init_data, this.template, '.days');
+        days.create_HTML();
+    },
+
+    update_model: function() {
+        let names = [];
+        for (let name of this.node_names) {
+            names.push(name.value);
+        }
+        main.set_init_data(this.node_days.value, names);
+        main.init_view_table();
+    },
+
+    cancel: function() {
+        this.btn_admin.classList.toggle('hidden');
+        const node = this.admin_form;
+        node.parentNode.removeChild(node);
+        this.visible = false;
+    }
+
+
+}
+
+
+view_admin.init();
+// main.init();
 
 

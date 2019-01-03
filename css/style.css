@@ -1,17 +1,19 @@
 body {
     line-height: 1.6;
     margin: 2em;
+    color: #525252;
 }
 
 th {
-    background-color: #001f3f;
-    color: #fff;
+    background-color: #f6f6f6;
+    color: #525252;
     padding: 0.5em 1em;
 }
 
 td {
     border-top: 1px solid #eee;
     padding: 0.5em 1em;
+    /* background-color: #e7e7e7; */
 }
 
 /* input {
@@ -23,7 +25,7 @@ td {
 
 /* Column types */
 th.missed-col {
-    background-color: #f00;
+    background-color: rgb(250, 181, 181);
 }
 
 td.missed-col {
@@ -48,6 +50,7 @@ td.missed-col {
     padding-top: 30px;
     cursor: pointer;
     font-size: 18px;
+
 }
 
 .control input {
@@ -58,12 +61,13 @@ td.missed-col {
 
 .control_indicator {
     position: absolute;
-    top: 2px;
-    left: 0;
-    height: 26px;
-    width: 26px;
+    top: 0px;
+    left: 0px;
+    height: 28px;
+    width: 30px;
     background: #ffffff;
-    border: 4px solid black;
+    /* background-color: #e7e7e7; */
+    border: 6px solid #f6f6f6;
 }
 /* .control-radio .control_indicator {
     border-radius: undefined%;
@@ -76,10 +80,11 @@ td.missed-col {
 
 .control input:checked ~ .control_indicator {
     background: #ffffff;
+    /* background-color: #e7e7e7; */
 }
 .control:hover input:not([disabled]):checked ~ .control_indicator,
 .control input:checked:focus ~ .control_indicator {
-    background: #000000dd;
+    background: #838383dd;
 }
 .control input:disabled ~ .control_indicator {
     background: #e6e6e6;
@@ -96,10 +101,10 @@ td.missed-col {
     display: block;
 }
 .control-checkbox .control_indicator:after {
-    left: 5px;
+    left: 6px;
     top: 1px;
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border: solid #00c33f;
     border-width: 0 5px 5px 0;
     transform: rotate(45deg);
