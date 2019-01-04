@@ -274,11 +274,6 @@ const view_admin = {
         this.node_submit.addEventListener('click', function() {
             view_admin._submit();
         });
-
-        // window.addEventListener('change', function(e) {
-        //     console.log(e.target);
-        //     // (e.target.type === 'checkbox') ? view_table._set_missing(e.target) : '';
-        // })
     },
 
     add_row: function add_row() {
@@ -300,7 +295,7 @@ const view_admin = {
                 names.push(name.value);
             }
         }
-        if (names === []) {
+        if (names.length === 0) {
             names = ['student1'];
         }
         main.set_init_data(this.node_days.value, names);
@@ -318,8 +313,6 @@ const view_admin = {
     //     node.parentNode.removeChild(node);
     //     this.visible = false;
     // }
-
-
 }
 
 main.init();
