@@ -2,7 +2,7 @@
 
 const model = {
     days: 10,
-    students: [ 'student1', 'studen2', 'studen3', 'studen4', 'student5'],
+    students: [ '', '', '', ''],
 
     get_data: function get_data() {
         return JSON.parse(localStorage.student_atend);
@@ -23,10 +23,11 @@ const model = {
 
 class CreateContent
 {
-    constructor(data, template, entry) {
+    constructor(data, template, entry, where = 'beforeend') {
         this.data           = data;
         this.template_class = template;
         this.entry_node     = document.querySelector(entry);
+        this.where          = where;
     }
 
     _getTemplate() {
@@ -41,7 +42,7 @@ class CreateContent
     }
 
     _insertHTML(html) {
-        this.entry_node.insertAdjacentHTML('beforeend', html);
+        this.entry_node.insertAdjacentHTML(this.where, html);
     }
 
     create_HTML() {
@@ -80,29 +81,23 @@ const main = {
         }
     },
 
+    // view table
+
     init_view_table: function init_table() {
         this._init_localstorage();
 
         view_table.init();
-        view_table.set_listener();
-
     },
 
-    reinit: function reinit() {
+    reinit_view_table: function reinit_view_table() {
         view_admin.reinit_toggle();
-        
-        this._delete_childs('days');
-        this._delete_childs('data');
+        view_table.clear();
+
         this._delete_data();
         this.init();
     },
 
-    _delete_childs: function delete_chids(node) {
-        const data = document.querySelector(`.${node}`);
-        while (data.firstChild) {
-            data.removeChild(data.firstChild);
-        }
-    },
+    // manipulate model
 
     _init_localstorage: function init_localstorage() {
         if (!model.check_data()) {
@@ -137,19 +132,6 @@ const main = {
         return model.get_data();
     },
 
-    get_init_data: function get_init() {
-        const data = {
-            days: model.days,
-            students: model.students
-        }
-        return data;
-    },
-
-    set_init_data: function(days, students) {
-        model.days = days;
-        model.students = students;
-    },
-
     set_data: function(data) {
         model.set_data(data);
     },
@@ -174,12 +156,40 @@ const main = {
         }
         model.set_data(data);
     },
+
+    // data manipulation for view_admin functionality
+
+    get_init_data: function get_init() {
+        const data = {
+            days: model.days,
+            students: model.students
+        }
+        return data;
+    },
+
+    set_init_data: function(days, students) {
+        model.days = days;
+        model.students = students;
+
+        main.init_view_table();
+    },
+
 };
 
 const view_table = {
     init: function() {
-        this.attend = main.get_data();
+        this.attend    = main.get_data();
+        this.node_days = document.querySelector('.days');
+        this.node_data = document.querySelector('.data');
 
+        //remove old data
+        this.clear();
+
+        this._init_render();
+        this._set_listener();
+    },
+
+    _init_render: function() {
         //table header row
         const days = new CreateContent(this.attend[0], '.days_template', '.days');
         days.create_HTML();
@@ -189,11 +199,20 @@ const view_table = {
         content.create_HTML();
     },
 
-    set_listener: function set_listener() {
+    _set_listener: function set_listener() {
         // When a checkbox is clicked, update localStorage
         window.addEventListener('change', function(e) {
             (e.target.type === 'checkbox') ? view_table._set_missing(e.target) : '';
         })
+    },
+
+    clear: function() {
+        while (this.node_days.firstChild) {
+            this.node_days.removeChild(this.node_days.firstChild);
+        }
+        while (this.node_data.firstChild) {
+            this.node_data.removeChild(this.node_data.firstChild);
+        }
     },
 
     // set value of missing column
@@ -228,13 +247,16 @@ const view_table = {
 const view_admin = {
     init: function() {
         this.visible = true;
-        this.init_render();
+        this._init_render();
 
-        this.node_days      = document.querySelector('input[name="days"]');
-        this.node_names     = document.querySelectorAll('input[name="name"]');
+        this.node_days   = document.querySelector('input[name="days"]');
+        this.node_submit = document.querySelector('input[name="submit"]');
+        this.node_add    = document.querySelector('input[name="add"]');
+
+        this._set_listeners();
     },
 
-    init_render: function() {
+    _init_render: function _init_render() {
         this.template  = '.admin_template';
         this.init_data = main.get_init_data();
 
@@ -243,15 +265,45 @@ const view_admin = {
         days.create_HTML();
     },
 
-    update_model: function() {
+    _set_listeners: function _set_listeners() {
+        // listen to the events on the form elements
+        this.node_add.addEventListener('click', function() {
+            view_admin.add_row();
+        });
+
+        this.node_submit.addEventListener('click', function() {
+            view_admin._submit();
+        });
+
+        // window.addEventListener('change', function(e) {
+        //     console.log(e.target);
+        //     // (e.target.type === 'checkbox') ? view_table._set_missing(e.target) : '';
+        // })
+    },
+
+    add_row: function add_row() {
+        this.row_template  = '.row_template';
+        this.where         = 'beforebegin';
+        const n = document.querySelectorAll('input[name="name"]').length + 1;
+
+        //table header row
+        const new_row = new CreateContent([n], this.row_template, '.add_stud', this.where);
+        new_row.create_HTML();
+    },
+
+    _submit: function _submit() {
+        const node_names  = document.querySelectorAll('input[name="name"]');
         let names = [];
-        for (let name of this.node_names) {
-            names.push(name.value);
+        for (let name of node_names) {
+
+            if (name.value != '') {
+                names.push(name.value);
+            }
+        }
+        if (names === []) {
+            names = ['student1'];
         }
         main.set_init_data(this.node_days.value, names);
-        main._delete_childs('days');
-        main.init_view_table();
-
         this.reinit_toggle();
     },
 
@@ -270,8 +322,6 @@ const view_admin = {
 
 }
 
-
 main.init();
-// main.init();
 
 

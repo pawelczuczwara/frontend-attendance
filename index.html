@@ -21,34 +21,44 @@
 
             </tbody>
         </table>
-        <input type='button' class='hidden reinit' value='Reinit data' onclick='main.reinit()' />
+        <br>
+        <input type='button' class='hidden reinit' value='Reinit data' onclick='main.reinit_view_table()' />
 
         <script src="js/handlebars.min.js"></script>
 
         <!-- Table head row template for handlebars -->
         <script class='admin_template' type='text/x-handlebars-template'>
             <tr>
-                <th class="name-col">No.</th>
                 <th class="name-col">Student Name</th>
                 {{#each students}}
                     <tr>
-                        <td>{{inc @index}}.</td>
                         <td>
-                            <label><input type='text' name='name' value='{{this}}' /></label>
+                            <label>{{inc @index}}. <input type='text' name='name' value='{{this}}' size="35"/></label>
                         </td>
                     </tr>
                 {{/each}}
+                <tr class='add_stud'>
+                    <td>
+                        <input type='button' name='add' value='+'>
+                    </td>
+                </tr>
+                <tr><td>
+                <label>Duration [days]: <input type='text' name='days' class='duration-days' value='{{days}}' size='22'/></label>
+                </td></tr>
                 <br>
-                <label>Duration [days]: <input type='text' name='days' class='duration-days' value='{{days}}' /></label>
-                <br>
-                <!-- <input type='button' onclick='view_admin.cancel()'       value='Cancel'> -->
-                <input type='button' onclick='view_admin.update_model()' value='Submit'>
+                <input type='button' name='submit' value='Submit'>
             </tr>
         </script>
 
-        <!-- <form class='admin_form'>
 
-        </form> -->
+        <!-- Table head row template for handlebars -->
+        <script class='row_template' type='text/x-handlebars-template'>
+            <tr>
+                <td>
+                    <label>{{this}}. <input type='text' name='name' value='' size="35"/></label>
+                </td>
+            </tr>
+        </script>
 
         <!-- Table head row template for handlebars -->
         <script class='days_template' type='text/x-handlebars-template'>
