@@ -35,6 +35,10 @@ class CreateContent
         Handlebars.registerHelper("inc", function(value, options) {
                 return parseInt(value) + 1;
         });
+        Handlebars.registerHelper("perc", function(missed) {
+            let percent = parseInt((parseInt(missed) / model.days) * 100);
+            return percent;
+        });
 
         const html = document.querySelector(this.template_class).innerHTML;
         const compiled_html = Handlebars.compile(html);
@@ -81,22 +85,6 @@ const main = {
         }
     },
 
-    // view table
-
-    init_view_table: function init_table() {
-        this._init_localstorage();
-
-        view_table.init();
-    },
-
-    reinit_view_table: function reinit_view_table() {
-        view_admin.reinit_toggle();
-        view_table.clear();
-
-        this._delete_data();
-        this.init();
-    },
-
     // manipulate model
 
     _init_localstorage: function init_localstorage() {
@@ -132,6 +120,10 @@ const main = {
         return model.get_data();
     },
 
+    get_calculate_percent: function(missed) {
+        return parseInt((missed / model.days) * 100);
+    },
+
     set_data: function(data) {
         model.set_data(data);
     },
@@ -156,6 +148,22 @@ const main = {
         }
         model.set_data(data);
     },
+    // view table
+
+    init_view_table: function init_table() {
+        this._init_localstorage();
+
+        view_table.init();
+        indicator.init();
+    },
+
+    reinit_view_table: function reinit_view_table() {
+        view_admin.reinit_toggle();
+        view_table.clear();
+
+        this._delete_data();
+        this.init();
+    },
 
     // data manipulation for view_admin functionality
 
@@ -176,6 +184,9 @@ const main = {
 
 };
 
+// global event listener to listen to click on chceckboxes
+var eListener = null;
+
 const view_table = {
     init: function() {
         this.attend    = main.get_data();
@@ -186,7 +197,9 @@ const view_table = {
         this.clear();
 
         this._init_render();
-        this._set_listener();
+        if (eListener === null) {
+            this._set_listener();
+        }
     },
 
     _init_render: function() {
@@ -201,9 +214,10 @@ const view_table = {
 
     _set_listener: function set_listener() {
         // When a checkbox is clicked, update localStorage
-        window.addEventListener('change', function(e) {
-            (e.target.type === 'checkbox') ? view_table._set_missing(e.target) : '';
-        })
+        // window.removeEventListener('change', eListener);
+        eListener = window.addEventListener('change', function(e) {
+            (e.target.type === 'checkbox') ? view_table._set_days(e.target) : '';
+        });
     },
 
     clear: function() {
@@ -216,8 +230,8 @@ const view_table = {
     },
 
     // set value of missing column
-    _set_missing: function(target) {
-        let missed_col = target.parentNode.parentNode.parentNode.querySelector('.missed-col');
+    _set_days: function(target) {
+        let missed_col = target.parentNode.parentNode.parentNode.querySelector('.sum_label');
         let data_key   = target.parentNode.parentNode.parentNode.dataset.key;
 
         if (target.checked) {
@@ -233,15 +247,17 @@ const view_table = {
     _row_data: function(student) {
         const row_node        = document.querySelector(`[data-key='${student}']`);
         const row_input_nodes = row_node.querySelectorAll('input');
-        const sum             = row_node.querySelector('.missed-col').innerHTML;
+        const days_missed             = row_node.querySelector('.sum_label').innerHTML;
         let   array           = [];
 
         for (let chbox of row_input_nodes) {
             array.push(chbox.checked);
         }
 
-        main.update_data(student, array, sum);
+        main.update_data(student, array, days_missed);
+        indicator.update_indicator(row_node, days_missed);
     },
+
 };
 
 const view_admin = {

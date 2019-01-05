@@ -92,10 +92,27 @@
                         </td>
                     {{/if}}
                 {{/each}}
-                <td class='missed-col'>{{missed}}</td>
+                <td class='missed-col'>
+                    <li class="note-display" data-percent="{{perc missed}}">
+                        <span class="sum_label">{{missed}}</span>
+                        <div class="circle">
+                          <svg width="84" height="84" class="circle__svg">
+                            <circle cx="41" cy="41" r="35" class="circle__progress circle__progress--path"></circle>
+                            <circle cx="41" cy="41" r="35" class="circle__progress circle__progress--fill"></circle>
+                          </svg>
+
+                          <div class="percent">
+                            <span class="percent__int">0</span>
+                            <span class="percent__dec">%</span>
+                          </div>
+                        </div>
+                      </li>
+                </td>
             </tr>
         </script>
 
+
+        <script src="js/indicator.js"></script>
         <script src="js/app.js"></script>
 
     </body>

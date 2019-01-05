@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css?family=Nixie+One|Raleway:200');
+
+.note-display {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* margin: 0 25px; */
+  margin: 0;
+}
+
+.circle {
+  position: relative;
+}
+
+.circle__svg {
+  transform: rotate(-90deg);
+}
+
+.circle__progress {
+  fill: none;
+  stroke-width: 3;
+  stroke-opacity: 0.3;
+  stroke-linecap: round;
+}
+
+.circle__progress--fill {
+  --initialStroke: 0;
+  --transitionDuration: 0;
+  stroke-opacity: 1;
+  stroke-dasharray: var(--initialStroke);
+  stroke-dashoffset: var(--initialStroke);
+  transition: stroke-dashoffset var(--transitionDuration) ease;
+}
+
+.note-display:nth-child(1) .circle__progress { stroke: #00c33f; }
+.note-display:nth-child(2) .circle__progress { stroke: #FF00AA; }
+.note-display:nth-child(3) .circle__progress { stroke: #AA00FF; }
+.note-display:nth-child(4) .circle__progress { stroke: #00AAFF; }
+
+.percent {
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  font-family: 'Raleway', serif;
+  font-weight: bold;
+  text-align: center;
+  /* line-height: 28px; */
+  transform: translate(-50%, -50%);
+}
+
+.percent__int { font-size: 28px; }
+.percent__dec { font-size: 12px; }
+
+.sum_label {
+  font-family: 'Raleway', serif;
+  font-size: 28px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-right: 14px;
+}

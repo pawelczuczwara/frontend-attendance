@@ -1,3 +1,5 @@
+@import url('./indicator.css');
+
 body {
     line-height: 1.6;
     margin: 2em;
@@ -15,11 +17,6 @@ td {
     padding: 0.5em 1em;
     /* background-color: #e7e7e7; */
 }
-
-/* input {
-    cursor: pointer;
-    transform: scale(2)
-} */
 
 .hidden {
     display: none;
