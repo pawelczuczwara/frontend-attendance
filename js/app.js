@@ -229,9 +229,7 @@ const view_table = {
     _init_render_sum: function() {
         //table sum row
         const sum_row = document.querySelector('.sum_row');
-        if (sum_row) {
-            sum_row.parentNode.removeChild(sum_row);
-        }
+        (sum_row) ? sum_row.parentNode.removeChild(sum_row) : '';
         const sum = new CreateContent(main.get_sum(), '.sum_template', '.data');
         sum.create_HTML();
     },
