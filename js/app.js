@@ -120,8 +120,21 @@ const main = {
         return model.get_data();
     },
 
-    get_calculate_percent: function(missed) {
-        return parseInt((missed / model.days) * 100);
+    get_sum: function get_sum() {
+        const data = this.get_data();
+        let sum_arr = [];
+        for (var i = 0; i <= (data[0].attend.length - 1); i++) {
+            let sum_col = 0;
+            for (let row of data) {
+                sum_col = sum_col + row.attend[i];
+            }
+            sum_arr.push(sum_col);
+        }
+        return { sum: sum_arr };
+    },
+
+    get_calculate_percent: function(x) {
+        return parseInt((x / model.days) * 100);
     },
 
     set_data: function(data) {
@@ -197,6 +210,7 @@ const view_table = {
         this.clear();
 
         this._init_render();
+        this._init_render_sum();
         if (eListener === null) {
             this._set_listener();
         }
@@ -211,6 +225,17 @@ const view_table = {
         const content = new CreateContent(this.attend, '.atend_template', '.data');
         content.create_HTML();
     },
+
+    _init_render_sum: function() {
+        //table sum row
+        const sum_row = document.querySelector('.sum_row');
+        if (sum_row) {
+            sum_row.parentNode.removeChild(sum_row);
+        }
+        const sum = new CreateContent(main.get_sum(), '.sum_template', '.data');
+        sum.create_HTML();
+    },
+
 
     _set_listener: function set_listener() {
         // When a checkbox is clicked, update localStorage
@@ -241,6 +266,7 @@ const view_table = {
         }
 
         this._row_data(data_key);
+        this._init_render_sum();
     },
 
     // get nodes for calculating new object of complete row data.
@@ -330,6 +356,76 @@ const view_admin = {
     //     this.visible = false;
     // }
 }
+
+
+const view_sum = {
+    init: function() {
+        // this.node_days = document.querySelector('.days');
+        // this.node_data = document.querySelector('.data');
+
+        //remove old data
+        // this.clear();
+
+        this._init_render();
+
+    },
+
+    _init_render: function() {
+        //table header row
+        this.sum    = main.get_sum();
+        const sum = new CreateContent(this.sum, '.sum_template', '.data');
+        sum.create_HTML();
+
+    },
+
+    // _set_listener: function set_listener() {
+    //     // When a checkbox is clicked, update localStorage
+    //     // window.removeEventListener('change', eListener);
+    //     eListener = window.addEventListener('change', function(e) {
+    //         (e.target.type === 'checkbox') ? view_table._set_days(e.target) : '';
+    //     });
+    // },
+
+    // clear: function() {
+    //     while (this.node_days.firstChild) {
+    //         this.node_days.removeChild(this.node_days.firstChild);
+    //     }
+    //     while (this.node_data.firstChild) {
+    //         this.node_data.removeChild(this.node_data.firstChild);
+    //     }
+    // },
+
+    // set value of missing column
+    // _set_days: function(target) {
+    //     let missed_col = target.parentNode.parentNode.parentNode.querySelector('.sum_label');
+    //     let data_key   = target.parentNode.parentNode.parentNode.dataset.key;
+
+    //     if (target.checked) {
+    //         missed_col.textContent =  parseInt(missed_col.textContent) - 1;
+    //     } else {
+    //         missed_col.textContent =  parseInt(missed_col.textContent) + 1;
+    //     }
+
+    //     this._row_data(data_key);
+    // },
+
+    // // get nodes for calculating new object of complete row data.
+    // _row_data: function(student) {
+    //     const row_node        = document.querySelector(`[data-key='${student}']`);
+    //     const row_input_nodes = row_node.querySelectorAll('input');
+    //     const days_missed             = row_node.querySelector('.sum_label').innerHTML;
+    //     let   array           = [];
+
+    //     for (let chbox of row_input_nodes) {
+    //         array.push(chbox.checked);
+    //     }
+
+    //     main.update_data(student, array, days_missed);
+    //     indicator.update_indicator(row_node, days_missed);
+    // },
+
+};
+
 
 main.init();
 

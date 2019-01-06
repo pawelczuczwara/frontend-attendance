@@ -1,10 +1,13 @@
 @import url('./indicator.css');
 
 body {
-    line-height: 1.6;
+    font-family: 'Raleway', serif;
+    /* line-height: 1.6; */
     margin: 2em;
     color: #525252;
 }
+
+
 
 th {
     background-color: #f6f6f6;
@@ -23,9 +26,14 @@ td {
 }
 
 /* Column types */
+
+td.name-col {
+    font-size: 1.4em;
+}
 th.missed-col {
     background-color: rgb(250, 181, 181);
 }
+
 
 td.missed-col {
     background-color: #ffecec;

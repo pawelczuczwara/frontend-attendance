@@ -73,7 +73,7 @@
 
         <!-- Table row template for attendance data -->
         <script class='atend_template' type='text/x-handlebars-template'>
-            <tr class='student' data-key='{{name}}'>
+            <tr class='student' data-key='{{name}}' data-id='{{id}}'>
                 <td class='name-col' >{{name}}</td>
                 {{#each attend}}
                     {{#if this}}
@@ -111,6 +111,15 @@
             </tr>
         </script>
 
+        <script class='sum_template' type='text/x-handlebars-template'>
+            <tr class='sum_row'>
+                <th class="name-col">Sum</th>
+                    {{#each sum}}
+                        <th>{{this}}</th>
+                    {{/each}}
+                <th class="missed-col"></th>
+            </tr>
+        </script>
 
         <script src="js/indicator.js"></script>
         <script src="js/app.js"></script>

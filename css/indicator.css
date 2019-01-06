@@ -18,24 +18,26 @@
 
 .circle__progress {
   fill: none;
-  stroke-width: 3;
+  stroke-width: 12;
   stroke-opacity: 0.3;
-  stroke-linecap: round;
+  stroke-linecap: square;
+  stroke: #00c33f;
 }
 
 .circle__progress--fill {
   --initialStroke: 0;
   --transitionDuration: 0;
   stroke-opacity: 1;
+  stroke-width: 4;
   stroke-dasharray: var(--initialStroke);
   stroke-dashoffset: var(--initialStroke);
   transition: stroke-dashoffset var(--transitionDuration) ease;
+  stroke: #f00;
 }
 
-.note-display:nth-child(1) .circle__progress { stroke: #00c33f; }
-.note-display:nth-child(2) .circle__progress { stroke: #FF00AA; }
-.note-display:nth-child(3) .circle__progress { stroke: #AA00FF; }
-.note-display:nth-child(4) .circle__progress { stroke: #00AAFF; }
+
+/* .note-display { stroke: #00ff22; } */
+
 
 .percent {
   width: 100%;
